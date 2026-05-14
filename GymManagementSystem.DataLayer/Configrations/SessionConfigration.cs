@@ -11,7 +11,7 @@ public class SessionConfigration : IEntityTypeConfiguration<Session>
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.Description)
-            .HasColumnType("nvarchar")
+            .HasColumnType("nvarchar(200)")
             .IsRequired();
 
         builder.Property(s => s.Capacity)
