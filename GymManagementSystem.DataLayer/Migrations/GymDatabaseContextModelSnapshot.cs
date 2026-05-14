@@ -16,7 +16,7 @@ namespace GymManagementSystem.DataLayer.Migrations
         // If you encounter a merge conflict in the line below, it means you need to
         // discard one of the migration branches and recreate its migrations on top of
         // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-        public override string LatestMigrationId => "20260514132637_DatabaseSchema";
+        public override string LatestMigrationId => "20260514151414_UpdateSessionDescriptionRange";
 
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -383,7 +383,7 @@ namespace GymManagementSystem.DataLayer.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
