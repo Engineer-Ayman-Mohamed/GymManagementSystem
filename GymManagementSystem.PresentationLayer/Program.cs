@@ -1,0 +1,51 @@
+using GymManagementSystem.BusinessLayer.Interfaces;
+using GymManagementSystem.BusinessLayer.Services;
+using GymManagementSystem.DataLayer.Database;
+using GymManagementSystem.DataLayer.Repositories.RepositoryClasses;
+using GymManagementSystem.DataLayer.Repositories.RepositoryInterfaces;
+using GymManagementSystem.DataLayer.SeedData;
+using GymManagementSystem.PresentationLayer.BackgroundGobs;
+using GymManagementSystem.PresentationLayer.ExceptionHandlers;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<GymDatabaseContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+});
+builder.Services.AddScoped<IPlanServices, PlanServices>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+builder.Services.AddScoped<ICleanUpDeletedRows, CleanUpDeletedRowsServices>();
+builder.Services.AddHostedService<SoftDeleteCleanUp>();
+var app = builder.Build();
+
+using var scope = app.Services.CreateScope(); 
+var context = scope.ServiceProvider.GetRequiredService<GymDatabaseContext>();
+await DatabaseSeed.SeedAsync(context);
+
+app.UseExceptionHandler();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+
+app.Run();
