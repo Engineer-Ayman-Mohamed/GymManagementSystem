@@ -7,45 +7,67 @@ using GymManagementSystem.DataLayer.SeedData;
 using GymManagementSystem.PresentationLayer.BackgroundGobs;
 using GymManagementSystem.PresentationLayer.ExceptionHandlers;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<GymDatabaseContext>(options =>
+try
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
-});
-builder.Services.AddScoped<IPlanServices, PlanServices>();
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
+    builder.Host.UseSerilog((ctx, cfg) =>
+        cfg.ReadFrom.Configuration(ctx.Configuration)
+           .WriteTo.Console()
+           .WriteTo.Seq(ctx.Configuration["Seq:ServerUrl"]!));
 
-builder.Services.AddScoped<ICleanUpDeletedRows, CleanUpDeletedRowsServices>();
-builder.Services.AddHostedService<SoftDeleteCleanUp>();
-var app = builder.Build();
+    builder.Services.AddControllersWithViews();
+    builder.Services.AddDbContext<GymDatabaseContext>(options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+    });
+    builder.Services.AddScoped<IPlanServices, PlanServices>();
 
-using var scope = app.Services.CreateScope(); 
-var context = scope.ServiceProvider.GetRequiredService<GymDatabaseContext>();
-await DatabaseSeed.SeedAsync(context);
+    builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+    builder.Services.AddProblemDetails();
 
-app.UseExceptionHandler();
+    builder.Services.AddScoped<ICleanUpDeletedRows, CleanUpDeletedRowsServices>();
+    builder.Services.AddHostedService<SoftDeleteCleanUp>();
+    var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHsts();
+    using var scope = app.Services.CreateScope(); 
+    var context = scope.ServiceProvider.GetRequiredService<GymDatabaseContext>();
+    await DatabaseSeed.SeedAsync(context);
+
+    app.UseSerilogRequestLogging();
+    app.UseExceptionHandler();
+
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseRouting();
+
+
+    app.UseAuthorization();
+
+    app.MapStaticAssets();
+
+    app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}")
+        .WithStaticAssets();
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapStaticAssets();
-
-app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
