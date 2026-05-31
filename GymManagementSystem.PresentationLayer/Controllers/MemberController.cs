@@ -1,0 +1,114 @@
+using GymManagementSystem.BusinessLayer.DTOs.Member;
+using GymManagementSystem.BusinessLayer.Exceptions;
+using GymManagementSystem.BusinessLayer.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace GymManagementSystem.PresentationLayer.Controllers;
+
+public class MembersController : Controller
+{
+    private readonly IMemberService _memberService;
+
+    public MembersController(IMemberService memberService)
+    {
+        _memberService = memberService;
+    }
+
+    public async Task<IActionResult> Index(CancellationToken ct)
+    {
+        var members = await _memberService.GetAllAsync(ct);
+        return Json(members);
+    }
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> Create([FromBody]CreateMemberRequest request, CancellationToken ct)
+    {
+        if (!ModelState.IsValid) return View(request);
+        try
+        {
+            var member = await _memberService.CreateAsync(request, ct);
+            TempData["StatusMessage"] = $"Member '{member.Name}' created successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+        catch (ConflictException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(request);
+        }
+    }
+    
+    public async Task<IActionResult> Edit([FromRoute] int id, CancellationToken ct)
+    {
+        var member = await _memberService.GetByIdAsync(id, ct);
+        if (member is null) return NotFound();
+        var request= new UpdateMemberRequest
+        {
+            Name = member.Name,
+            Email = member.Email,
+            Phone = member.Phone,
+            DateOfBirth = member.DateOfBirth,
+            Gender = Enum.TryParse<DataLayer.Enums.Gender>(member.Gender, out var gender) ? gender : null,
+            Photo = member.Photo,
+            JoinDate = member.JoinDate,
+            BuildingNumber = member.BuildingNumber,
+            Street = member.Street,
+            City = member.City
+        };
+        return View(request);
+    }
+
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> Edit(
+        [FromRoute] int id,
+        [FromBody] UpdateMemberRequest request,
+        CancellationToken ct
+        )
+    {
+        if (!ModelState.IsValid) return View(request);
+        try
+        {
+            await _memberService.UpdateAsync(id, request, ct);
+            TempData["StatusMessage"] = "Member updated successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        catch (ConflictException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(request);
+        }
+    }
+
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> Delete(int id, CancellationToken ct)
+    {
+        try
+        {
+            await _memberService.DeleteAsync(id, ct);
+            TempData["StatusMessage"] = "Member deleted successfully.";
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Details([FromRoute] int id, CancellationToken ct)
+    {
+        var member = await _memberService.GetByIdAsync(id, ct);
+        if (member is null)
+            return NotFound();
+        return View(member);
+    }
+}

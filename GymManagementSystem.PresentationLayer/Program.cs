@@ -1,8 +1,8 @@
 using GymManagementSystem.BusinessLayer.Interfaces;
 using GymManagementSystem.BusinessLayer.Services;
 using GymManagementSystem.DataLayer.Database;
+using GymManagementSystem.DataLayer.Interfaces;
 using GymManagementSystem.DataLayer.Repositories.RepositoryClasses;
-using GymManagementSystem.DataLayer.Repositories.RepositoryInterfaces;
 using GymManagementSystem.DataLayer.SeedData;
 using GymManagementSystem.PresentationLayer.BackgroundGobs;
 using GymManagementSystem.PresentationLayer.ExceptionHandlers;
@@ -27,13 +27,15 @@ try
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
     });
-    builder.Services.AddScoped<IPlanServices, PlanServices>();
 
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
     builder.Services.AddProblemDetails();
 
     builder.Services.AddScoped<ICleanUpDeletedRows, CleanUpDeletedRowsServices>();
     builder.Services.AddHostedService<SoftDeleteCleanUp>();
+    builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+    builder.Services.AddScoped<IMemberService, MemberService>();
+
     var app = builder.Build();
 
     using var scope = app.Services.CreateScope(); 
