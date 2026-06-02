@@ -1,0 +1,153 @@
+@model GymManagementSystem.BusinessLayer.DTOs.Member.UpdateMemberRequest
+
+@{
+    ViewData["Title"] = "Edit Member";
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-user-edit me-2"></i>Edit Member</h2>
+        <p class="subtitle">Update member information</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<form asp-action="Edit" method="post" class="needs-validation" novalidate>
+    @Html.AntiForgeryToken()
+
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+    {
+        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert" style="border-radius: 10px; border-left: 4px solid var(--danger);">
+            <i class="fas fa-exclamation-circle" style="font-size: 1.3rem;"></i>
+            <div>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div class="small">@error.ErrorMessage</div>
+                }
+            </div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card form-section">
+                <div class="card-header">
+                    <i class="fas fa-user me-2"></i>Personal Information
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Name" class="form-label">Full Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input asp-for="Name" class="form-control" placeholder="Enter full name">
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Gender" class="form-label">Gender</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                                <select asp-for="Gender" class="form-select" asp-items="Html.GetEnumSelectList<Gender>()">
+                                    <option value="">-- Select Gender --</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="Gender" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input asp-for="Email" class="form-control" placeholder="email@example.com" type="email">
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label">Phone Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                <input asp-for="Phone" class="form-control" placeholder="010xxxxxxxx">
+                            </div>
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                <input asp-for="DateOfBirth" class="form-control" type="date">
+                            </div>
+                            <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="JoinDate" class="form-label">Join Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+                                <input asp-for="JoinDate" class="form-control" type="date">
+                            </div>
+                            <span asp-validation-for="JoinDate" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card form-section">
+                <div class="card-header">
+                    <i class="fas fa-map-marker-alt me-2"></i>Address
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="City" class="form-label">City</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                <input asp-for="City" class="form-control" placeholder="e.g. Cairo">
+                            </div>
+                            <span asp-validation-for="City" class="text-danger small"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="BuildingNumber" class="form-label">Building</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                                <input asp-for="BuildingNumber" class="form-control" type="number" placeholder="42">
+                            </div>
+                            <span asp-validation-for="BuildingNumber" class="text-danger small"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="Street" class="form-label">Street</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-road"></i></span>
+                                <input asp-for="Street" class="form-control" placeholder="Street name">
+                            </div>
+                            <span asp-validation-for="Street" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card form-section">
+                <div class="card-body text-center">
+                    <i class="fas fa-sync-alt" style="font-size: 2rem; color: var(--secondary); opacity: 0.5; margin-bottom: 8px;"></i>
+                    <p class="small text-muted mb-0">Update the member's details above</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-3 mt-4 justify-content-end form-section">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-times"></i> Cancel
+        </a>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Changes
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

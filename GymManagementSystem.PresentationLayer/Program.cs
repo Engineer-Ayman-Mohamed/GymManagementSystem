@@ -35,7 +35,7 @@ try
     builder.Services.AddHostedService<SoftDeleteCleanUp>();
     builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
     builder.Services.AddScoped<IMemberService, MemberService>();
-
+    builder.Services.AddScoped<IExportService, ExportService>();
     var app = builder.Build();
 
     using var scope = app.Services.CreateScope(); 

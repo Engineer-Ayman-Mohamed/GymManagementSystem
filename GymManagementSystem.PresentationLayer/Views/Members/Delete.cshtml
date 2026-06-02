@@ -1,0 +1,62 @@
+@model GymManagementSystem.BusinessLayer.DTOs.Member.MemberDto
+
+@{
+    ViewData["Title"] = "Delete Member";
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-user-minus me-2"></i>Delete Member</h2>
+        <p class="subtitle">Remove a member from the system</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card delete-card">
+            <div class="delete-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Are you sure?</h3>
+            <p>
+                You are about to delete member
+                <span class="member-name-highlight">@Model.Name</span>.
+                This action cannot be undone. All associated data will be permanently removed.
+            </p>
+
+            <div class="card mb-4" style="background: var(--gray-50);">
+                <div class="card-body text-start">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="member-avatar @(Model.Gender == "Female" ? "female" : "")" style="width: 48px; height: 48px; font-size: 1.1rem;">
+                            @(Model.Name?.Length > 0 ? Model.Name[0].ToString().ToUpper() : "?")
+                        </div>
+                        <div>
+                            <div class="fw-bold">@Model.Name</div>
+                            <div class="small text-muted">@Model.Email</div>
+                        </div>
+                    </div>
+                    <div class="small text-muted">
+                        <i class="fas fa-phone me-1"></i>@Model.Phone |
+                        <i class="fas fa-map-marker-alt me-1 ms-2"></i>@Model.City |
+                        <i class="fas fa-calendar me-1 ms-2"></i>Joined @Model.JoinDate.ToString("MMM yyyy")
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <div class="d-flex gap-3 justify-content-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        <i class="fas fa-trash"></i> Delete Member
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
