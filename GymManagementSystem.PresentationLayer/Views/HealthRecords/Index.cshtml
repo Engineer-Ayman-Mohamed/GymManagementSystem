@@ -1,0 +1,158 @@
+@model IReadOnlyList<HealthRecordDto>
+
+@{
+    ViewData["Title"] = "Health Records";
+    var avgBmi = Model.Count > 0 ? Model.Average(r => r.Weight / ((r.Height / 100m) * (r.Height / 100m))) : 0;
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-heartbeat me-2"></i>Health Records</h2>
+        <p class="subtitle">View all member health records</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <div class="btn-group" role="group">
+            <a asp-action="ExportExcel" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Excel
+            </a>
+            <a asp-action="ExportPdf" class="btn btn-danger">
+                <i class="fas fa-file-pdf"></i> PDF
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon purple"><i class="fas fa-heartbeat"></i></div>
+        <div class="stat-label">Total Records</div>
+        <div class="stat-value">@Model.Count</div>
+        <div class="stat-trend"><i class="fas fa-list"></i> All records</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-weight"></i></div>
+        <div class="stat-label">Avg. Weight</div>
+        <div class="stat-value">@(Model.Count > 0 ? Model.Average(r => r.Weight).ToString("F1") : "0") kg</div>
+        <div class="stat-trend"><i class="fas fa-arrow-down"></i> Body weight</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon pink"><i class="fas fa-ruler-vertical"></i></div>
+        <div class="stat-label">Avg. Height</div>
+        <div class="stat-value">@(Model.Count > 0 ? Model.Average(r => r.Height).ToString("F1") : "0") cm</div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i> Body height</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber"><i class="fas fa-calculator"></i></div>
+        <div class="stat-label">Avg. BMI</div>
+        <div class="stat-value">@avgBmi.ToString("F1")</div>
+        <div class="stat-trend"><i class="fas fa-chart-line"></i> Body mass index</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span><i class="fas fa-list me-2"></i>All Health Records</span>
+        <div class="d-flex align-items-center gap-2">
+            <div class="btn-group btn-group-sm" role="group">
+                <a asp-action="ExportExcel" class="btn btn-outline-success" title="Export to Excel">
+                    <i class="fas fa-file-excel"></i>
+                </a>
+                <a asp-action="ExportPdf" class="btn btn-outline-danger" title="Export to PDF">
+                    <i class="fas fa-file-pdf"></i>
+                </a>
+            </div>
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control form-control-sm" id="healthSearch" placeholder="Search records..." style="width: 180px;">
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-container">
+            <table class="table table-hover mb-0" id="healthRecordsTable">
+                <thead>
+                    <tr>
+                        <th>Member</th>
+                        <th>Height</th>
+                        <th>Weight</th>
+                        <th>BMI</th>
+                        <th>Blood Type</th>
+                        <th>Notes</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="fas fa-heartbeat"></i>
+                                    <h4>No health records yet</h4>
+                                    <p>Health records are created when viewing a member's profile.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var record = Model[i];
+                            var bmi = record.Height > 0 ? record.Weight / ((record.Height / 100m) * (record.Height / 100m)) : 0;
+                            <tr class="row-striped" style="animation: fadeInUp 0.4s ease-out @(i * 0.05)s both;">
+                                <td>
+                                    <div class="member-cell">
+                                        <div class="member-info">
+                                            <div class="member-name">@record.MemberName</div>
+                                            <div class="member-email">ID: @record.MemberId</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@record.Height.ToString("F1") cm</td>
+                                <td>@record.Weight.ToString("F1") kg</td>
+                                <td>
+                                    <span class="status-badge @(bmi < 18.5m ? "inactive" : bmi < 25m ? "active" : "pending")">
+                                        <span class="status-dot"></span>
+                                        @bmi.ToString("F1")
+                                    </span>
+                                </td>
+                                <td><strong>@record.BloodType</strong></td>
+                                <td>@(string.IsNullOrEmpty(record.Note) ? "-" : (record.Note.Length > 30 ? record.Note[..30] + "..." : record.Note))</td>
+                                <td class="text-end">
+                                    <div class="action-btns justify-content-end">
+                                        <a asp-action="Details" asp-route-id="@record.Id" class="btn btn-outline-primary btn-sm" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@record.Id" class="btn btn-warning btn-sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@record.Id" class="btn btn-danger btn-sm" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#healthSearch').on('keyup', function() {
+                const value = this.value.toLowerCase();
+                $('#healthRecordsTable tbody tr').each(function() {
+                    const row = $(this);
+                    if (row.find('.empty-state').length) return;
+                    const text = row.text().toLowerCase();
+                    row.toggle(text.includes(value));
+                });
+            });
+        });
+    </script>
+}

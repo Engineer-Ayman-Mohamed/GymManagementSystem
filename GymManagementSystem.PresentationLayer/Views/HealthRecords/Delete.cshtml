@@ -1,0 +1,56 @@
+@model HealthRecordDto
+
+@{
+    ViewData["Title"] = "Delete Health Record";
+    var bmi = Model.Height > 0 ? Model.Weight / ((Model.Height / 100m) * (Model.Height / 100m)) : 0;
+}
+
+<div class="delete-card">
+    <div class="delete-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h3>Delete Health Record</h3>
+    <p class="text-muted mb-2">
+        Are you sure you want to delete the health record for <strong>@Model.MemberName</strong>?
+    </p>
+    <p class="text-muted mb-4 small">
+        <i class="fas fa-info-circle me-1"></i>
+        This action will soft-delete the health record. Historical data will be preserved.
+    </p>
+
+    <div class="detail-items mb-4">
+        <div class="detail-item">
+            <span class="detail-label">Member</span>
+            <span class="detail-value">@Model.MemberName</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Height</span>
+            <span class="detail-value">@Model.Height.ToString("F1") cm</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Weight</span>
+            <span class="detail-value">@Model.Weight.ToString("F1") kg</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">BMI</span>
+            <span class="detail-value">@bmi.ToString("F1")</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Blood Type</span>
+            <span class="detail-value">@Model.BloodType</span>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+        <div class="d-flex gap-2 justify-content-center">
+            <a asp-controller="Members" asp-action="Details" asp-route-id="@Model.MemberId" class="btn btn-outline-secondary">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+    </form>
+</div>
