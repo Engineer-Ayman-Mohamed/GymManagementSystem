@@ -1,5 +1,8 @@
+using System.Net.Http.Headers;
 using GymManagementSystem.BusinessLayer.DTOs.Member;
+using GymManagementSystem.BusinessLayer.Enums;
 using GymManagementSystem.BusinessLayer.Exceptions;
+using GymManagementSystem.BusinessLayer.Export;
 using GymManagementSystem.BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +11,22 @@ namespace GymManagementSystem.PresentationLayer.Controllers;
 public class MembersController : Controller
 {
     private readonly IMemberService _memberService;
+    private readonly IExportService _exportService;
 
-    public MembersController(IMemberService memberService)
+    public MembersController(IMemberService memberService, IExportService exportService)
     {
         _memberService = memberService;
+        _exportService = exportService;
     }
 
     public async Task<IActionResult> Index(CancellationToken ct)
+    {
+        var members = await _memberService.GetAllAsync(ct);
+        return View(members);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetMembers(CancellationToken ct)
     {
         var members = await _memberService.GetAllAsync(ct);
         return Json(members);
@@ -25,8 +37,8 @@ public class MembersController : Controller
     }
 
     [HttpPost]
-    [IgnoreAntiforgeryToken]
-    public async Task<IActionResult> Create([FromBody]CreateMemberRequest request, CancellationToken ct)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateMemberRequest request, CancellationToken ct)
     {
         if (!ModelState.IsValid) return View(request);
         try
@@ -63,10 +75,10 @@ public class MembersController : Controller
     }
 
     [HttpPost]
-    [IgnoreAntiforgeryToken]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         [FromRoute] int id,
-        [FromBody] UpdateMemberRequest request,
+        UpdateMemberRequest request,
         CancellationToken ct
         )
     {
@@ -88,9 +100,16 @@ public class MembersController : Controller
         }
     }
 
-    [HttpPost]
-    [IgnoreAntiforgeryToken]
-    public async Task<IActionResult> Delete(int id, CancellationToken ct)
+    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken ct)
+    {
+        var member = await _memberService.GetByIdAsync(id, ct);
+        if (member is null) return NotFound();
+        return View(member);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken ct)
     {
         try
         {
@@ -110,5 +129,32 @@ public class MembersController : Controller
         if (member is null)
             return NotFound();
         return View(member);
+    }
+    [HttpGet]
+    public async Task<IActionResult> ExportExcel(CancellationToken ct)
+    {
+        var members = await _memberService.GetAllAsync(ct);
+        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmm");
+        var bytes = await _exportService.ExportAsync(
+            members, MemberExport.GetColumns(), ExportFormat.Excel, "Members", ct);
+
+        return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            $"members_{timestamp}.xlsx");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ExportPdf(CancellationToken ct)
+    {
+        var members = await _memberService.GetAllAsync(ct);
+        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmm");
+        var bytes = await _exportService.ExportAsync(
+            members, MemberExport.GetColumns(), ExportFormat.Pdf, "Members", ct);
+
+        var cd = new ContentDispositionHeaderValue("inline")
+        {
+            FileName = $"members_{timestamp}.pdf"
+        };
+        Response.Headers.ContentDisposition = cd.ToString();
+        return File(bytes, "application/pdf");
     }
 }

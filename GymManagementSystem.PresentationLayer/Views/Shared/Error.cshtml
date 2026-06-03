@@ -1,0 +1,54 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+    var statusCode = Model.StatusCode > 0 ? Model.StatusCode.ToString() : "";
+}
+
+<h1 class="text-danger">
+    @if (Model.StatusCode == 404)
+    {
+        <text>Page Not Found</text>
+    }
+    else if (Model.StatusCode == 403)
+    {
+        <text>Access Denied</text>
+    }
+    else if (Model.StatusCode == 409)
+    {
+        <text>Conflict</text>
+    }
+    else
+    {
+        <text>Error</text>
+    }
+</h1>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <h2 class="text-danger">@Model.ErrorMessage</h2>
+}
+else
+{
+    <h2 class="text-danger">An error occurred while processing your request.</h2>
+}
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+@if (!string.IsNullOrEmpty(statusCode))
+{
+    <p>
+        <strong>Status Code:</strong> <code>@statusCode</code>
+    </p>
+}
+
+@if (Model.ShowExceptionDetails)
+{
+    <hr />
+    <h3>Exception Details</h3>
+    <pre class="text-muted" style="overflow-x: auto; white-space: pre-wrap; word-break: break-all;">@Model.ExceptionDetails</pre>
+}

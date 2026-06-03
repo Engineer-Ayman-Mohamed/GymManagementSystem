@@ -16,10 +16,10 @@ public class CategoryConfigration : IEntityTypeConfiguration<Category>
             .IsRequired();
 
         builder.Property(c => c.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("getdate()");
 
         builder.Property(c => c.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(c => c.CreatedBy)
             .HasColumnType("varchar")

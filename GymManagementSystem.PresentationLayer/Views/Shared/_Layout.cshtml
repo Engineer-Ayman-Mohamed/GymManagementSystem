@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - GymSystem</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/GymManagementSystem.PresentationLayer.styles.css" asp-append-version="true"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <span class="brand-text">GymSystem</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a class="nav-item" asp-controller="Members" asp-action="Index">
+                    <i class="fas fa-users"></i>
+                    <span>Members</span>
+                </a>
+                <a class="nav-item" asp-controller="Sessions" asp-action="Index">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Sessions</span>
+                </a>
+                <a class="nav-item" asp-controller="Bookings" asp-action="Index">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Bookings</span>
+                </a>
+                <a class="nav-item" asp-controller="Attendance" asp-action="Scan">
+                    <i class="fas fa-qrcode"></i>
+                    <span>Attendance</span>
+                </a>
+                <a class="nav-item" asp-controller="Home" asp-action="Privacy">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Privacy</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="hamburger" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="top-bar-title">
+                    <h1>@ViewData["Title"]</h1>
+                </div>
+                <div class="top-bar-actions">
+                    <div class="notification-badge">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge-dot"></span>
+                    </div>
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
+
+            @if (TempData["StatusMessage"] is not null)
+            {
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999">
+                    <div class="toast align-items-center text-white border-0 bg-success fade show" role="alert" id="statusToast">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                <i class="fas fa-check-circle me-2"></i>@TempData["StatusMessage"]
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="container-fluid p-4">
+                @RenderBody()
+            </div>
+
+            <footer class="main-footer">
+                <span>&copy; @DateTime.Now.Year - GymSystem. All rights reserved.</span>
+                <span class="footer-heart"><i class="fas fa-heart"></i> Built with passion</span>
+            </footer>
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

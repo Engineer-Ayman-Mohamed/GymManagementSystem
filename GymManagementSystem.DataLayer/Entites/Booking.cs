@@ -9,4 +9,5 @@ public class Booking : BaseEntity
     public Member Member { get; set; } = null!;
     public int SessionId { get; set; }
     public Session Session { get; set; } = null!;
+    public DateTime? CheckedInAt { get; set; }
 }

@@ -47,10 +47,10 @@ public class SessionConfigration : IEntityTypeConfiguration<Session>
         });
 
         builder.Property(s => s.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(s => s.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(s => s.CreatedBy)
             .HasColumnType("varchar")
