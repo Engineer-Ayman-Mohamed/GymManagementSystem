@@ -1,54 +1,70 @@
 ﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
-    var statusCode = Model.StatusCode > 0 ? Model.StatusCode.ToString() : "";
-}
-
-<h1 class="text-danger">
-    @if (Model.StatusCode == 404)
+    var statusCode = Model.StatusCode > 0 ? Model.StatusCode.ToString() : "Error";
+    var errorTitle = Model.StatusCode switch
     {
-        <text>Page Not Found</text>
-    }
-    else if (Model.StatusCode == 403)
+        404 => "Page Not Found",
+        403 => "Access Denied",
+        409 => "Conflict",
+        500 => "Server Error",
+        _ => "Something Went Wrong"
+    };
+    var errorIcon = Model.StatusCode switch
     {
-        <text>Access Denied</text>
-    }
-    else if (Model.StatusCode == 409)
-    {
-        <text>Conflict</text>
-    }
-    else
-    {
-        <text>Error</text>
-    }
-</h1>
-
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <h2 class="text-danger">@Model.ErrorMessage</h2>
-}
-else
-{
-    <h2 class="text-danger">An error occurred while processing your request.</h2>
+        404 => "fas fa-map-signs",
+        403 => "fas fa-lock",
+        409 => "fas fa-exclamation-triangle",
+        500 => "fas fa-server",
+        _ => "fas fa-exclamation-circle"
+    };
 }
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+<div class="error-container">
+    <div class="error-card">
+        <div class="error-icon">
+            <i class="@errorIcon"></i>
+        </div>
+        <div class="error-code">@statusCode</div>
+        <h2 class="error-title">@errorTitle</h2>
+        <p class="error-message">
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                @Model.ErrorMessage
+            }
+            else if (Model.StatusCode == 404)
+            {
+                <text>The page you're looking for doesn't exist or has been moved.</text>
+            }
+            else
+            {
+                <text>An unexpected error occurred while processing your request. Please try again later.</text>
+            }
+        </p>
 
-@if (!string.IsNullOrEmpty(statusCode))
-{
-    <p>
-        <strong>Status Code:</strong> <code>@statusCode</code>
-    </p>
-}
+        @if (Model.ShowRequestId)
+        {
+            <div class="error-details">
+                <span class="error-detail-label">Request ID:</span>
+                <code>@Model.RequestId</code>
+            </div>
+        }
 
-@if (Model.ShowExceptionDetails)
-{
-    <hr />
-    <h3>Exception Details</h3>
-    <pre class="text-muted" style="overflow-x: auto; white-space: pre-wrap; word-break: break-all;">@Model.ExceptionDetails</pre>
-}
+        @if (Model.ShowExceptionDetails && !string.IsNullOrEmpty(Model.ExceptionDetails))
+        {
+            <div class="error-exception">
+                <h5><i class="fas fa-bug me-1"></i> Exception Details</h5>
+                <pre>@Model.ExceptionDetails</pre>
+            </div>
+        }
+
+        <div class="error-actions">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                <i class="fas fa-home"></i> Go Home
+            </a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-redo"></i> Try Again
+            </a>
+        </div>
+    </div>
+</div>

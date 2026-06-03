@@ -1,9 +1,10 @@
 @model GymManagementSystem.BusinessLayer.DTOs.Member.MemberDto
-
+@using GymManagementSystem.BusinessLayer.DTOs.HealthRecord
 @{
     ViewData["Title"] = "Member Details";
     var initial = Model.Name?.Length > 0 ? Model.Name[0].ToString().ToUpper() : "?";
     var isFemale = Model.Gender == "Female";
+    var healthRecord = ViewData["HealthRecord"] as HealthRecordDto;
 }
 
 <div class="page-header">
@@ -34,10 +35,13 @@
         </div>
     </div>
 
-    <div class="col-lg-8">
+    <div class="col-lg-8 d-flex flex-column gap-3">
         <div class="card detail-group">
-            <div class="card-header">
-                <i class="fas fa-info-circle me-2"></i>Basic Information
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-info-circle me-2"></i>Basic Information</span>
+                <a asp-controller="HealthRecords" asp-action="Index" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-heartbeat"></i> All Records
+                </a>
             </div>
             <div class="card-body">
                 <div class="detail-item">
@@ -88,6 +92,66 @@
                     <span class="detail-label"><i class="fas fa-hashtag"></i> Building</span>
                     <span class="detail-value">@Model.BuildingNumber</span>
                 </div>
+            </div>
+        </div>
+
+        <div class="card detail-group">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-heartbeat me-2"></i>Health Record</span>
+                @if (healthRecord is not null)
+                {
+                    <div class="d-flex gap-2">
+                        <a asp-controller="HealthRecords" asp-action="Edit" asp-route-id="@healthRecord.Id" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a asp-controller="HealthRecords" asp-action="Details" asp-route-id="@healthRecord.Id" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="HealthRecords" asp-action="Create" asp-route-memberId="@Model.Id" class="btn btn-success btn-sm">
+                        <i class="fas fa-plus"></i> Add Record
+                    </a>
+                }
+            </div>
+            <div class="card-body">
+                @if (healthRecord is not null)
+                {
+                    var bmi = healthRecord.Height > 0 ? healthRecord.Weight / ((healthRecord.Height / 100m) * (healthRecord.Height / 100m)) : 0;
+                    <div class="row g-3">
+                        <div class="col-4 text-center">
+                            <div class="small text-muted">Height</div>
+                            <div class="fw-bold fs-5">@healthRecord.Height.ToString("F1") cm</div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="small text-muted">Weight</div>
+                            <div class="fw-bold fs-5">@healthRecord.Weight.ToString("F1") kg</div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="small text-muted">Blood Type</div>
+                            <div class="fw-bold fs-5">@healthRecord.BloodType</div>
+                        </div>
+                        <div class="col-12 text-center mt-2">
+                            <span class="status-badge @(bmi < 18.5m ? "inactive" : bmi < 25m ? "active" : "pending")">
+                                <span class="status-dot"></span>
+                                BMI: @bmi.ToString("F1")
+                            </span>
+                            @if (!string.IsNullOrEmpty(healthRecord.Note))
+                            {
+                                <p class="small text-muted mt-2 mb-0"><i class="fas fa-sticky-note me-1"></i>@healthRecord.Note</p>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-2">
+                        <i class="fas fa-heartbeat" style="font-size: 1.5rem; color: var(--gray-300);"></i>
+                        <p class="small text-muted mt-1 mb-0">No health record on file.</p>
+                    </div>
+                }
             </div>
         </div>
     </div>
