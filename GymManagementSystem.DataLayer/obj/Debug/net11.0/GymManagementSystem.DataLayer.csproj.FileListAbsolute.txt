@@ -1,0 +1,15 @@
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\bin\Debug\net11.0\GymManagementSystem.DataLayer.deps.json
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\bin\Debug\net11.0\GymManagementSystem.DataLayer.runtimeconfig.json
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\bin\Debug\net11.0\GymManagementSystem.DataLayer.dll
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\bin\Debug\net11.0\GymManagementSystem.DataLayer.pdb
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.csproj.AssemblyReference.cache
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.GeneratedMSBuildEditorConfig.editorconfig
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.AssemblyInfoInputs.cache
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.AssemblyInfo.cs
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.csproj.CoreCompileInputs.cache
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.sourcelink.json
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.dll
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\refint\GymManagementSystem.DataLayer.dll
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.pdb
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\GymManagementSystem.DataLayer.genruntimeconfig.cache
+E:\ASP.NET\GymSystem\GymManagementSystem\GymManagementSystem.DataLayer\obj\Debug\net11.0\ref\GymManagementSystem.DataLayer.dll
