@@ -22,9 +22,33 @@ public sealed class GenericRepository<T> : IGenericRepository<T> where T : BaseE
         return await _dbSet.FindAsync(new object[] { id }, ct);
     }
 
+    public async Task<T?> GetByIdWithIncludesAsync(int id, CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = _dbSet.AsSplitQuery();
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id, ct);
+    }
+
     public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken ct = default)
     {
         return await _dbSet.AsNoTracking().ToListAsync(ct);
+    }
+
+    public async Task<IReadOnlyList<T>> GetAllWithIncludesAsync(CancellationToken ct = default, params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = _dbSet.AsNoTracking().AsSplitQuery();
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return await query.ToListAsync(ct);
     }
 
     public async Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default)

@@ -79,10 +79,10 @@ public class MemberConfigration : IEntityTypeConfiguration<Member>
         builder.HasIndex(m => m.JoinDate);
 
         builder.Property(m => m.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(m => m.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(m => m.CreatedBy)
             .HasColumnType("varchar")

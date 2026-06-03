@@ -31,10 +31,10 @@ public class BookingConfigration : IEntityTypeConfiguration<Booking>
         builder.HasIndex(b => b.BookingDate);
 
         builder.Property(b => b.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(b => b.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(b => b.CreatedBy)
             .HasColumnType("varchar")
@@ -45,5 +45,9 @@ public class BookingConfigration : IEntityTypeConfiguration<Booking>
             .HasDefaultValue(false);
 
         builder.HasQueryFilter(b => !b.IsDeleted);
+        
+        builder.Property(b => b.CheckedInAt)
+            .HasDefaultValueSql("GETDATE()")
+            .IsRequired(false);
     }
 }

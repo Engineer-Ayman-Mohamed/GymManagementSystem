@@ -1,0 +1,76 @@
+@model BookingDto
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-bookmark me-2"></i>Booking Details</h2>
+        <p class="subtitle">Detailed booking information</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="Attendance" asp-action="MyQr" asp-route-bookingId="@Model.Id" class="btn btn-dark">
+            <i class="fas fa-qrcode"></i> Show QR
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card detail-group">
+            <div class="card-header">
+                <i class="fas fa-info-circle me-2"></i>Booking Information
+            </div>
+            <div class="card-body">
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-user"></i> Member</span>
+                    <span class="detail-value">@Model.MemberName (@Model.MemberEmail)</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-calendar-alt"></i> Session</span>
+                    <span class="detail-value">@Model.SessionDescription</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-user-tie"></i> Trainer</span>
+                    <span class="detail-value">@Model.TrainerName</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-tag"></i> Category</span>
+                    <span class="detail-value">@Model.CategoryName</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-calendar"></i> Booking Date</span>
+                    <span class="detail-value">@Model.BookingDate.ToString("MMM dd, yyyy")</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-check-circle"></i> Status</span>
+                    <span class="detail-value">
+                        @if (Model.IsAttended)
+                        {
+                            <span class="status-badge active">
+                                <span class="status-dot"></span> Checked In (@Model.CheckedInAt?.ToString("MMM dd, yyyy HH:mm"))
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="status-badge inactive">
+                                <span class="status-dot"></span> Pending
+                            </span>
+                        }
+                    </span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-clock"></i> Created At</span>
+                    <span class="detail-value">@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

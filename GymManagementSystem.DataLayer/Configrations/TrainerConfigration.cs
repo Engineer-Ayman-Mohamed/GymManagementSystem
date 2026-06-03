@@ -74,10 +74,10 @@ public class TrainerConfigration : IEntityTypeConfiguration<Trainer>
         builder.HasIndex(t => t.HireDate);
 
         builder.Property(t => t.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(t => t.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(t => t.CreatedBy)
             .HasColumnType("varchar")

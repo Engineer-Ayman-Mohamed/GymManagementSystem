@@ -42,10 +42,10 @@ public class PlanConfigration : IEntityTypeConfiguration<Plan>
         });
 
         builder.Property(p => p.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(p => p.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(p => p.CreatedBy)
             .HasColumnType("varchar")

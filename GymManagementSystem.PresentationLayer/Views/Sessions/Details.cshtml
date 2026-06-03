@@ -1,0 +1,60 @@
+@model SessionDto
+
+@{
+    ViewData["Title"] = "Session Details";
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-calendar-alt me-2"></i>Session Details</h2>
+        <p class="subtitle">Detailed information about @Model.Description</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card detail-group">
+            <div class="card-header">
+                <i class="fas fa-info-circle me-2"></i>Session Information
+            </div>
+            <div class="card-body">
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-tag"></i> Description</span>
+                    <span class="detail-value">@Model.Description</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-users"></i> Capacity</span>
+                    <span class="detail-value">@Model.Capacity</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-user-tie"></i> Trainer</span>
+                    <span class="detail-value">@Model.TrainerName</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-tag"></i> Category</span>
+                    <span class="detail-value">@Model.CategoryName</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-play"></i> Start Date</span>
+                    <span class="detail-value">@Model.StartDate.ToString("MMM dd, yyyy HH:mm")</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-stop"></i> End Date</span>
+                    <span class="detail-value">@Model.EndDate.ToString("MMM dd, yyyy HH:mm")</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-clock"></i> Created At</span>
+                    <span class="detail-value">@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

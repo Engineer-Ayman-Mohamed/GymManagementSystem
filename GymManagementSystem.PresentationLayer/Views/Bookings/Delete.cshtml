@@ -1,0 +1,62 @@
+@model BookingDto
+
+@{
+    ViewData["Title"] = "Delete Booking";
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-bookmark-minus me-2"></i>Delete Booking</h2>
+        <p class="subtitle">Remove a booking from the system</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card delete-card">
+            <div class="delete-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Are you sure?</h3>
+            <p>
+                You are about to delete the booking for
+                <span class="member-name-highlight">@Model.MemberName</span>
+                in <span class="member-name-highlight">@Model.SessionDescription</span>.
+                This action cannot be undone.
+            </p>
+
+            <div class="card mb-4" style="background: var(--gray-50);">
+                <div class="card-body text-start">
+                    <div class="fw-bold mb-2">@Model.MemberName</div>
+                    <div class="small text-muted">
+                        <i class="fas fa-calendar-alt me-1"></i>@Model.SessionDescription |
+                        <i class="fas fa-user-tie me-1 ms-2"></i>@Model.TrainerName |
+                        <i class="fas fa-tag me-1 ms-2"></i>@Model.CategoryName
+                    </div>
+                    <div class="small text-muted mt-1">
+                        <i class="fas fa-calendar me-1"></i>Booked: @Model.BookingDate.ToString("MMM dd, yyyy")
+                        @if (Model.IsAttended)
+                        {
+                            <span class="ms-2 text-success"><i class="fas fa-check-circle"></i> Checked In</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <div class="d-flex gap-3 justify-content-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        <i class="fas fa-trash"></i> Delete Booking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

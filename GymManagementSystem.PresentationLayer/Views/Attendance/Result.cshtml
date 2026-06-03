@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Check-In Result";
+    var result = ViewBag.Result as string;
+    var message = ViewBag.Message as string;
+    var isSuccess = string.Equals(result, "Success", StringComparison.OrdinalIgnoreCase);
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-clipboard-check me-2"></i>Check-In Result</h2>
+        <p class="subtitle">Attendance verification status</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Scan" class="btn btn-primary">
+            <i class="fas fa-camera"></i> Scan Again
+        </a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Home
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card text-center">
+            <div class="card-body py-5">
+                @if (isSuccess)
+                {
+                    <div class="result-icon success mb-4">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="mb-2 text-success">Check-In Successful!</h3>
+                }
+                else
+                {
+                    <div class="result-icon error mb-4">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <h3 class="mb-2 text-danger">Check-In Failed</h3>
+                }
+
+                <p class="text-muted mb-4">
+                    <i class="fas fa-info-circle me-1"></i>@message
+                </p>
+
+                @if (isSuccess)
+                {
+                    <div class="alert alert-success d-inline-flex align-items-center gap-2 px-4 py-2 mb-0" role="alert" style="border-radius: 50px;">
+                        <i class="fas fa-check"></i>
+                        <span>Enjoy your session!</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex gap-2 justify-content-center flex-wrap mt-4">
+                        <a asp-action="Scan" class="btn btn-primary">
+                            <i class="fas fa-redo"></i> Try Again
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

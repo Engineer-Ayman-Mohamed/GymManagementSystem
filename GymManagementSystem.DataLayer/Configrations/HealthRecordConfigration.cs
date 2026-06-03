@@ -36,10 +36,10 @@ public class HealthRecordConfigration : IEntityTypeConfiguration<HealthRecord>
             .IsUnique();
 
         builder.Property(h => h.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(h => h.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
+            .HasDefaultValueSql("GETDATE()");
 
         builder.Property(h => h.CreatedBy)
             .HasColumnType("varchar")
