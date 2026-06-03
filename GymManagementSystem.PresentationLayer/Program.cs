@@ -39,6 +39,10 @@ try
     builder.Services.AddScoped<IBookingService, BookingService>();
     builder.Services.AddScoped<IExportService, ExportService>();
     builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+    builder.Services.AddScoped<ITrainerService, TrainerService>();
+    builder.Services.AddScoped<IPlanService, PlanService>();
+    builder.Services.AddScoped<IMembershipService, MembershipService>();
+    builder.Services.AddScoped<IHealthRecordService, HealthRecordService>();
     var app = builder.Build();
 
     using var scope = app.Services.CreateScope(); 

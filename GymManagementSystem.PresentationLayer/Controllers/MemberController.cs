@@ -12,11 +12,13 @@ public class MembersController : Controller
 {
     private readonly IMemberService _memberService;
     private readonly IExportService _exportService;
+    private readonly IHealthRecordService _healthRecordService;
 
-    public MembersController(IMemberService memberService, IExportService exportService)
+    public MembersController(IMemberService memberService, IExportService exportService, IHealthRecordService healthRecordService)
     {
         _memberService = memberService;
         _exportService = exportService;
+        _healthRecordService = healthRecordService;
     }
 
     public async Task<IActionResult> Index(CancellationToken ct)
@@ -128,6 +130,10 @@ public class MembersController : Controller
         var member = await _memberService.GetByIdAsync(id, ct);
         if (member is null)
             return NotFound();
+
+        var healthRecord = await _healthRecordService.GetByMemberIdAsync(id, ct);
+        ViewData["HealthRecord"] = healthRecord;
+
         return View(member);
     }
     [HttpGet]

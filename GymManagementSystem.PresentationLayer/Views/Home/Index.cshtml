@@ -1,8 +1,113 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
+    var memberCount = (int)ViewData["MemberCount"]!;
+    var sessionCount = (int)ViewData["SessionCount"]!;
+    var bookingCount = (int)ViewData["BookingCount"]!;
+    var trainerCount = (int)ViewData["TrainerCount"]!;
+    var checkedInCount = (int)ViewData["CheckedInCount"]!;
+    var upcomingSessions = (int)ViewData["UpcomingSessions"]!;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-dumbbell me-1"></i> Gym Management System
+        </div>
+        <h1 class="hero-title">Welcome to <span class="text-gradient">GymSystem</span></h1>
+        <p class="hero-subtitle">
+            Your all-in-one platform for managing members, sessions, bookings, and attendance.
+            Streamline your gym operations with powerful tools and real-time insights.
+        </p>
+        <div class="hero-actions">
+            <a asp-controller="Members" asp-action="Index" class="btn btn-hero">
+                <i class="fas fa-users"></i> View Members
+            </a>
+            <a asp-controller="Attendance" asp-action="Scan" class="btn btn-hero-outline">
+                <i class="fas fa-qrcode"></i> Scan QR
+            </a>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="hero-icon-grid">
+            <div class="hero-icon-item"><i class="fas fa-users"></i></div>
+            <div class="hero-icon-item"><i class="fas fa-calendar-alt"></i></div>
+            <div class="hero-icon-item"><i class="fas fa-qrcode"></i></div>
+            <div class="hero-icon-item"><i class="fas fa-dumbbell"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+        <div class="stat-label">Total Members</div>
+        <div class="stat-value">@memberCount</div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i> Active members</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-calendar-alt"></i></div>
+        <div class="stat-label">Sessions</div>
+        <div class="stat-value">@sessionCount</div>
+        <div class="stat-trend"><i class="fas fa-clock"></i> @upcomingSessions upcoming</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon pink"><i class="fas fa-bookmark"></i></div>
+        <div class="stat-label">Bookings</div>
+        <div class="stat-value">@bookingCount</div>
+        <div class="stat-trend"><i class="fas fa-check-circle"></i> @checkedInCount checked in</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber"><i class="fas fa-user-tie"></i></div>
+        <div class="stat-label">Trainers</div>
+        <div class="stat-value">@trainerCount</div>
+        <div class="stat-trend"><i class="fas fa-star"></i> Professionals</div>
+    </div>
+</div>
+
+<h3 class="section-title"><i class="fas fa-bolt me-2"></i>Quick Actions</h3>
+<div class="feature-grid">
+    <a asp-controller="Members" asp-action="Create" class="feature-card">
+        <div class="feature-icon purple"><i class="fas fa-user-plus"></i></div>
+        <h4>Add Member</h4>
+        <p>Register a new gym member into the system</p>
+    </a>
+    <a asp-controller="Sessions" asp-action="Create" class="feature-card">
+        <div class="feature-icon green"><i class="fas fa-calendar-plus"></i></div>
+        <h4>Create Session</h4>
+        <p>Schedule a new training session with trainer</p>
+    </a>
+    <a asp-controller="Bookings" asp-action="Create" class="feature-card">
+        <div class="feature-icon pink"><i class="fas fa-bookmark"></i></div>
+        <h4>New Booking</h4>
+        <p>Book a member into an upcoming session</p>
+    </a>
+    <a asp-controller="Attendance" asp-action="Scan" class="feature-card">
+        <div class="feature-icon amber"><i class="fas fa-qrcode"></i></div>
+        <h4>Scan QR</h4>
+        <p>Check in a member using their QR code</p>
+    </a>
+</div>
+
+<h3 class="section-title"><i class="fas fa-info-circle me-2"></i>Getting Started</h3>
+<div class="getting-started-grid">
+    <div class="getting-started-card">
+        <div class="step-number">1</div>
+        <h5>Add Members</h5>
+        <p>Start by registering your gym members with their personal details and contact information.</p>
+    </div>
+    <div class="getting-started-card">
+        <div class="step-number">2</div>
+        <h5>Create Sessions</h5>
+        <p>Schedule training sessions with trainers, set capacity, and define session categories.</p>
+    </div>
+    <div class="getting-started-card">
+        <div class="step-number">3</div>
+        <h5>Manage Bookings</h5>
+        <p>Allow members to book sessions. Track attendance and manage capacity efficiently.</p>
+    </div>
+    <div class="getting-started-card">
+        <div class="step-number">4</div>
+        <h5>QR Check-In</h5>
+        <p>Generate QR codes for bookings. Members scan at the front desk for quick check-in.</p>
+    </div>
 </div>

@@ -32,6 +32,39 @@
     </div>
 }
 
+@{
+    var checkedInCount = Model.Count(b => b.IsAttended);
+    var pendingCount = Model.Count(b => !b.IsAttended);
+    var thisMonthCount = Model.Count(b => b.BookingDate >= DateTime.Now.AddMonths(-1));
+}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon purple"><i class="fas fa-bookmark"></i></div>
+        <div class="stat-label">Total Bookings</div>
+        <div class="stat-value">@Model.Count</div>
+        <div class="stat-trend"><i class="fas fa-list"></i> All bookings</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-label">Checked In</div>
+        <div class="stat-value">@checkedInCount</div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i> Attended</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon pink"><i class="fas fa-clock"></i></div>
+        <div class="stat-label">Pending</div>
+        <div class="stat-value">@pendingCount</div>
+        <div class="stat-trend"><i class="fas fa-hourglass-half"></i> Awaiting check-in</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber"><i class="fas fa-calendar-check"></i></div>
+        <div class="stat-label">This Month</div>
+        <div class="stat-value">@thisMonthCount</div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i> Recent bookings</div>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span><i class="fas fa-list me-2"></i>All Bookings</span>

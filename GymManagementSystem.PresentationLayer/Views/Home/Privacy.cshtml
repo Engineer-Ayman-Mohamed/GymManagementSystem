@@ -1,6 +1,150 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-shield-alt me-2"></i>Privacy Policy</h2>
+        <p class="subtitle">How we collect, use, and protect your information</p>
+    </div>
+</div>
+
+<div class="privacy-container">
+    <div class="privacy-intro">
+        <p><strong>Last updated:</strong> @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+        <p>
+            GymSystem ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our gym management platform.
+        </p>
+    </div>
+
+    <div class="privacy-section">
+        <div class="privacy-section-header">
+            <div class="privacy-section-icon"><i class="fas fa-database"></i></div>
+            <h3>1. Information We Collect</h3>
+        </div>
+        <div class="privacy-section-body">
+            <p>We collect information that you provide directly to us and information generated through your use of our platform:</p>
+            <h5>Personal Information</h5>
+            <ul>
+                <li>Full name, email address, and phone number</li>
+                <li>Date of birth and gender</li>
+                <li>Home address (city, street, building number)</li>
+                <li>Profile photo (if provided)</li>
+            </ul>
+            <h5>Membership Information</h5>
+            <ul>
+                <li>Membership type and subscription details</li>
+                <li>Session bookings and attendance records</li>
+                <li>Health records (if provided for fitness assessment)</li>
+            </ul>
+            <h5>Usage Information</h5>
+            <ul>
+                <li>Login timestamps and session duration</li>
+                <li>QR code scan records for attendance check-in</li>
+                <li>Device and browser information</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="privacy-section">
+        <div class="privacy-section-header">
+            <div class="privacy-section-icon"><i class="fas fa-cogs"></i></div>
+            <h3>2. How We Use Your Information</h3>
+        </div>
+        <div class="privacy-section-body">
+            <p>We use the information we collect for the following purposes:</p>
+            <ul>
+                <li><strong>Gym Management:</strong> To manage your membership, process bookings, and track attendance</li>
+                <li><strong>Communication:</strong> To send you booking confirmations, session updates, and gym announcements</li>
+                <li><strong>Safety:</strong> To ensure proper capacity management and health record tracking</li>
+                <li><strong>Improvement:</strong> To analyze usage patterns and improve our platform features</li>
+                <li><strong>Compliance:</strong> To comply with legal obligations and resolve disputes</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="privacy-section">
+        <div class="privacy-section-header">
+            <div class="privacy-section-icon"><i class="fas fa-lock"></i></div>
+            <h3>3. Data Storage & Security</h3>
+        </div>
+        <div class="privacy-section-body">
+            <p>We implement robust security measures to protect your data:</p>
+            <ul>
+                <li>All data is stored in encrypted databases with access controls</li>
+                <li>QR codes are signed with HMAC-SHA256 cryptographic signatures to prevent forgery</li>
+                <li>Regular security audits and vulnerability assessments</li>
+                <li>Session-based authentication with secure cookie handling</li>
+                <li>Data is retained only for as long as necessary to provide our services</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="privacy-section">
+        <div class="privacy-section-header">
+            <div class="privacy-section-icon"><i class="fas fa-cookie-bite"></i></div>
+            <h3>4. Cookies & Tracking</h3>
+        </div>
+        <div class="privacy-section-body">
+            <p>Our platform uses minimal cookies for essential functionality:</p>
+            <ul>
+                <li><strong>Session Cookies:</strong> Required for authentication and maintaining your login state</li>
+                <li><strong>Functional Cookies:</strong> Remember your preferences (e.g., sidebar collapse state)</li>
+            </ul>
+            <p>We do not use third-party tracking cookies or advertising trackers.</p>
+        </div>
+    </div>
+
+    <div class="privacy-section">
+        <div class="privacy-section-header">
+            <div class="privacy-section-icon"><i class="fas fa-share-alt"></i></div>
+            <h3>5. Third-Party Services</h3>
+        </div>
+        <div class="privacy-section-body">
+            <p>We do not sell, trade, or otherwise transfer your personal information to third parties. Your data is used exclusively within the GymSystem platform for gym management purposes.</p>
+            <p>We may share aggregated, anonymized data (which cannot identify individuals) for analytics and platform improvement.</p>
+        </div>
+    </div>
+
+    <div class="privacy-section">
+        <div class="privacy-section-header">
+            <div class="privacy-section-icon"><i class="fas fa-user-check"></i></div>
+            <h3>6. Your Rights</h3>
+        </div>
+        <div class="privacy-section-body">
+            <p>You have the following rights regarding your personal data:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of all personal data we hold about you</li>
+                <li><strong>Correction:</strong> Request correction of inaccurate or incomplete data</li>
+                <li><strong>Deletion:</strong> Request deletion of your personal data (subject to legal retention requirements)</li>
+                <li><strong>Portability:</strong> Request your data in a structured, machine-readable format</li>
+                <li><strong>Objection:</strong> Object to processing of your data for specific purposes</li>
+            </ul>
+            <p>To exercise any of these rights, please contact us using the information below.</p>
+        </div>
+    </div>
+
+    <div class="privacy-section">
+        <div class="privacy-section-header">
+            <div class="privacy-section-icon"><i class="fas fa-envelope"></i></div>
+            <h3>7. Contact Us</h3>
+        </div>
+        <div class="privacy-section-body">
+            <p>If you have any questions about this Privacy Policy or our data practices, please contact us:</p>
+            <div class="contact-card">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>privacy@gymmanagement.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>123 Fitness Street, Gym City, GC 12345</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

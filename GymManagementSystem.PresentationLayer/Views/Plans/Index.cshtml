@@ -1,0 +1,163 @@
+@model IReadOnlyList<PlanDto>
+
+@{
+    ViewData["Title"] = "Plans";
+    var activePlans = Model.Count(p => p.IsActive);
+    var avgPrice = Model.Count > 0 ? Model.Average(p => p.Price) : 0;
+    var avgDuration = Model.Count > 0 ? (int)Model.Average(p => p.DurationDays) : 0;
+}
+
+<div class="page-header">
+    <div>
+        <h2><i class="fas fa-clipboard-list me-2"></i>Plans</h2>
+        <p class="subtitle">Manage membership plans and pricing</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <div class="btn-group" role="group">
+            <a asp-action="ExportExcel" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Excel
+            </a>
+            <a asp-action="ExportPdf" class="btn btn-danger">
+                <i class="fas fa-file-pdf"></i> PDF
+            </a>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Plan
+        </a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon purple"><i class="fas fa-clipboard-list"></i></div>
+        <div class="stat-label">Total Plans</div>
+        <div class="stat-value">@Model.Count</div>
+        <div class="stat-trend"><i class="fas fa-list"></i> All plans</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-label">Active Plans</div>
+        <div class="stat-value">@activePlans</div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i> Currently available</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon pink"><i class="fas fa-dollar-sign"></i></div>
+        <div class="stat-label">Avg. Price</div>
+        <div class="stat-value">$@avgPrice.ToString("F2")</div>
+        <div class="stat-trend"><i class="fas fa-tag"></i> Per plan</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber"><i class="fas fa-calendar-alt"></i></div>
+        <div class="stat-label">Avg. Duration</div>
+        <div class="stat-value">@avgDuration days</div>
+        <div class="stat-trend"><i class="fas fa-clock"></i> Per plan</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span><i class="fas fa-list me-2"></i>All Plans</span>
+        <div class="d-flex align-items-center gap-2">
+            <div class="btn-group btn-group-sm" role="group">
+                <a asp-action="ExportExcel" class="btn btn-outline-success" title="Export to Excel">
+                    <i class="fas fa-file-excel"></i>
+                </a>
+                <a asp-action="ExportPdf" class="btn btn-outline-danger" title="Export to PDF">
+                    <i class="fas fa-file-pdf"></i>
+                </a>
+            </div>
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control form-control-sm" id="planSearch" placeholder="Search plans..." style="width: 180px;">
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-container">
+            <table class="table table-hover mb-0" id="plansTable">
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Duration</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <h4>No plans yet</h4>
+                                    <p>Get started by creating your first plan.</p>
+                                    <a asp-action="Create" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Add First Plan
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var plan = Model[i];
+                            <tr class="row-striped" style="animation: fadeInUp 0.4s ease-out @(i * 0.05)s both;">
+                                <td>
+                                    <div class="member-cell">
+                                        <div class="member-info">
+                                            <div class="member-name">@plan.Name</div>
+                                            <div class="member-email">@(plan.Description.Length > 60 ? plan.Description[..60] + "..." : plan.Description)</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><i class="fas fa-clock text-primary me-1"></i>@plan.DurationDays days</td>
+                                <td><strong class="text-success">$@plan.Price.ToString("F2")</strong></td>
+                                <td>
+                                    <span class="status-badge @(plan.IsActive ? "active" : "inactive")">
+                                        <span class="status-dot"></span>
+                                        @(plan.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td>@plan.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td class="text-end">
+                                    <div class="action-btns justify-content-end">
+                                        <a asp-action="Details" asp-route-id="@plan.Id" class="btn btn-outline-primary btn-sm" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@plan.Id" class="btn btn-warning btn-sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@plan.Id" class="btn btn-danger btn-sm" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $('#planSearch').on('keyup', function() {
+                const value = this.value.toLowerCase();
+                $('#plansTable tbody tr').each(function() {
+                    const row = $(this);
+                    if (row.find('.empty-state').length) return;
+                    const text = row.text().toLowerCase();
+                    row.toggle(text.includes(value));
+                });
+            });
+        });
+    </script>
+}
