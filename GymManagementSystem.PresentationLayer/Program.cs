@@ -17,16 +17,25 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((ctx, cfg) =>
-        cfg.ReadFrom.Configuration(ctx.Configuration)
-           .WriteTo.Console()
-           .WriteTo.Seq(ctx.Configuration["Seq:ServerUrl"]!));
+    var isTesting = builder.Environment.IsEnvironment("Testing");
+
+    if (!isTesting)
+    {
+        builder.Host.UseSerilog((ctx, cfg) =>
+            cfg.ReadFrom.Configuration(ctx.Configuration)
+               .WriteTo.Console()
+               .WriteTo.Seq(ctx.Configuration["Seq:ServerUrl"]!));
+    }
 
     builder.Services.AddControllersWithViews();
-    builder.Services.AddDbContext<GymDatabaseContext>(options =>
+
+    if (!isTesting)
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
-    });
+        builder.Services.AddDbContext<GymDatabaseContext>(options =>
+        {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+        });
+    }
 
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
     builder.Services.AddProblemDetails();
@@ -49,7 +58,7 @@ try
     var context = scope.ServiceProvider.GetRequiredService<GymDatabaseContext>();
     await DatabaseSeed.SeedAsync(context);
 
-    app.UseSerilogRequestLogging();
+    if (!isTesting) app.UseSerilogRequestLogging();
     app.UseExceptionHandler();
 
     if (!app.Environment.IsDevelopment())
